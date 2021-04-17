@@ -58,48 +58,88 @@ struct SearchResult {
     let correct: Bool
 }
 
-func search(in graph: Graph, start: String = "a", target: String, using searchAlgorithm: @escaping (String, Node) -> Node?) -> SearchResult {
+struct Level1 {
     
-    var searchEvents = [String]()
-    let searchNodes = SearchNode.create(from: graph) { event in
-        searchEvents.append(event)
+    typealias SearchAlgorithm = (String, Node) -> Node?
+    
+    let graph = Graph(nodes: [
+        .init(id: "a", value: "a", neighbors: ["b"]),
+        .init(id: "b", value: "b", neighbors: ["c"]),
+        .init(id: "c", value: "c", neighbors: []),
+    ])
+    
+    let start: String
+    let targetValue: String
+    private var correctNodeId: String?
+    
+    init(start: String = "a", targetValue: String) {
+        self.start = start
+        self.targetValue = targetValue
+        let (_, nodeId) = search(using: correctSearch)
+        self.correctNodeId = nodeId
     }
     
-    let node = searchAlgorithm(target, searchNodes[start]!)
-    let correct = (node as! SearchNode).node.value == target // Avoid triggering the observer again!
+    struct SearchResult {
+        let searchEvents: [String]
+        let nodeId: String?
+        let correct: Bool
+    }
     
-    return SearchResult(searchEvents: searchEvents, node: node, correct: correct)
-}
-
-class SearchNode: Node {
-    static func create(from graph: Graph, observer: ((String) -> ())?) -> [String: SearchNode] {
-        var searchNodes = [String: SearchNode]()
-        for node in graph.nodes.values {
-            let searchNode = SearchNode(node: node)
-            searchNodes[node.id] = searchNode
-            searchNode.observer = observer
+    private func correctSearch(for target: String, in node: Node) -> Node? {
+        if node.value == target {
+            return node
+        } else if let neighbor = node.neighbor {
+            return correctSearch(for: target, in: neighbor)
+        } else {
+            return nil
         }
-        for (source, destinations) in graph.edges {
-            searchNodes[source]!.neighbor = destinations.map { searchNodes[$0]! }.first
+    }
+    
+    func search(using searchAlgorithm: SearchAlgorithm) -> SearchResult {
+        let (events, nodeId) = search(using: searchAlgorithm)
+        let correct = (nodeId == correctNodeId)
+        return SearchResult(searchEvents: events, nodeId: nodeId, correct: correct)
+    }
+    
+    private func search(using searchAlgorithm: SearchAlgorithm) -> (searchEvents: [String], nodeId: String?) {
+        var searchEvents = [String]()
+        let searchNodes = SearchNode.create(from: graph) { event in
+            searchEvents.append(event)
         }
-        return searchNodes
+        let node = searchAlgorithm(targetValue, searchNodes[start]!) as? SearchNode
+        return (searchEvents, node?.id)
     }
     
-    let node: Graph.Node
-    
-    var id: String {
-        node.id
-    }
-    
-    var value: String {
-        observer?(id)
-        return node.value
-    }
-    var neighbor: Node?
-    var observer: ((String) -> ())?
-    
-    init(node: Graph.Node) {
-        self.node = node
+    private class SearchNode: Node {
+        static func create(from graph: Graph, observer: ((String) -> ())?) -> [String: SearchNode] {
+            var searchNodes = [String: SearchNode]()
+            for node in graph.nodes.values {
+                let searchNode = SearchNode(node: node)
+                searchNodes[node.id] = searchNode
+                searchNode.observer = observer
+            }
+            for (source, destinations) in graph.edges {
+                searchNodes[source]!.neighbor = destinations.map { searchNodes[$0]! }.first
+            }
+            return searchNodes
+        }
+        
+        let node: Graph.Node
+        
+        var id: String {
+            node.id
+        }
+        
+        var value: String {
+            observer?(id)
+            return node.value
+        }
+        var neighbor: Node?
+        var observer: ((String) -> ())?
+        
+        init(node: Graph.Node) {
+            self.node = node
+        }
     }
 }
 
@@ -108,20 +148,17 @@ class SearchNode: Node {
 class Scene: SKScene {
     static func create(target: String, searchAlgorithm: @escaping (String, Node) -> Node?) -> SKScene {
         let scene = Scene(fileNamed: "scene")!
-        scene.searchAlgorithm = searchAlgorithm
+        let level = Level1(targetValue: target)
+        scene.searchResult = level.search(using: searchAlgorithm)
+        scene.graph = level.graph
         return scene
     }
     
-    var searchAlgorithm: ( (String, Node) -> Node?)!
-    let graph = Graph(nodes: [
-        .init(id: "a", value: "a", neighbors: ["b"]),
-        .init(id: "b", value: "b", neighbors: ["c"]),
-        .init(id: "c", value: "c", neighbors: []),
-    ])
+    var graph: Graph!
+    var searchResult: Level1.SearchResult!
     
     override func didMove(to view: SKView) {
-        let searchResult = search(in: graph, target: "c", using: searchAlgorithm)
-        print(searchResult)
+        print(searchResult!)
         // TODO: Animate search result!
     }
     
