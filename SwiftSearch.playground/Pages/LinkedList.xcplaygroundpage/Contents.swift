@@ -15,7 +15,7 @@ func search(for target: String, in node: Node) -> Node? {
 }
 
 let view = View(target: "🐒", searchAlgorithm: search, speed: 1)
-// TODO: Set live view here!
+PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
 //: [Next](@next)
