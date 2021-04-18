@@ -13,6 +13,7 @@ public class View: SKView {
         showsFPS = true
         showsNodeCount = true
         let scene = Scene.create(target: target, searchAlgorithm: searchAlgorithm)
+        scene.speed = CGFloat(speed)
         presentScene(scene)
     }
     
@@ -151,7 +152,7 @@ class Scene: SKScene {
         let level = Level1(targetValue: target)
         scene.searchResult = level.search(using: searchAlgorithm)
         scene.graph = level.graph
-        scene.childNode(withName: "graph")?.children.forEach { node in
+        scene.childNode(withName: "graph")?.children.compactMap { $0 as? SKSpriteNode }.forEach { node in
             scene.setupNodeSprite(circle: node)
         }
         scene.backgroundColor = .white
@@ -169,7 +170,7 @@ class Scene: SKScene {
     private var nodeSprites = [String: NodeSprite]()
     
     // Quick fix until I figure out how to load custom subclasses in editor into Playgrounds.
-    private func setupNodeSprite(circle: SKNode) {
+    private func setupNodeSprite(circle: SKSpriteNode) {
         let nodeId = circle.name!
         let position = circle.position
         let parent = circle.parent
@@ -192,15 +193,7 @@ class Scene: SKScene {
             self.animateSearchEvents()
         }
         let searchEvent = searchEventsQueue.removeFirst()
-        let selectAnimation = {
-            self.nodeSprites[searchEvent]!.select(completion: completion)
-        }
-        if let oldSelection = selectedNodeId {
-            self.nodeSprites[oldSelection]!.deselect(completion: selectAnimation)
-        } else {
-            selectAnimation()
-        }
-        selectedNodeId = searchEvent
+        nodeSprites[searchEvent]!.check(completion: completion)
     }
     
 }
@@ -213,7 +206,7 @@ class NodeSprite: SKNode {
     
     // Child nodes
     private let transform = SKTransformNode()
-    private var circle: SKNode!
+    private var circle: SKSpriteNode!
     private var label: SKLabelNode!
     
     required init?(coder aDecoder: NSCoder) {
@@ -232,33 +225,35 @@ class NodeSprite: SKNode {
     }
     
     // Quick fix until I figure out how to load custom subclasses in editor into Playgrounds.
-    func setup(circle: SKNode) {
+    func setup(circle: SKSpriteNode) {
         self.circle = circle
         circle.removeFromParent()
         transform.addChild(circle)
         circle.position = .zero
+        circle.color = .systemBlue
         label = (circle.childNode(withName: "label")! as! SKLabelNode)
         label.text = "?"
     }
     
-    func select(completion: (() -> ())? = nil) {
-        circle.run(.colorize(with: .blue, colorBlendFactor: 1, duration: 0.3))
+    // OBS: SKAction.colorize fungerar inte om noden tags bort och flyttas runt mellan parents.
+    // Tills vidare löser jag det utan att animera för att kunna gå vidare med viktigare saker!
+    // Jag tror faktiskt att det blir tydligare utan animationer för sådant som algoritmen inte direkt påverkar!
+    
+    func check(completion: (() -> ())? = nil) {
         run(.sequence([
             .scale(to: 1.5, duration: 0.3),
             .wait(forDuration: 0.5),
             .run {
-                self.reveal(completion: completion)
+                self.reveal() {
+                    self.run(.sequence([
+                        SKAction.wait(forDuration: 0.3),
+                        .scale(to: 1, duration: 0.3)
+                    ])) {
+                        completion?()
+                    }
+                }
             }
         ]))
-    }
-    
-    func deselect(completion: (() -> ())? = nil) {
-        circle.run(.colorize(with: .gray, colorBlendFactor: 1, duration: 0.3))
-        run(.sequence([
-            .scale(to: 1, duration: 0.3),
-        ])) {
-            completion?()
-        }
     }
     
     private func reveal(completion: (() -> ())? = nil) {
@@ -277,7 +272,7 @@ class NodeSprite: SKNode {
             self.transform.xRotation = progress * .pi
         }
         
-        run(.sequence([action, .wait(forDuration: 0.3)])) {
+        run(action) {
             completion?()
         }
     }
