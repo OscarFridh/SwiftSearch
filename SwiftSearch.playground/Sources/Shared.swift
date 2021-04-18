@@ -247,7 +247,10 @@ class NodeSprite: SKNode {
     
     private func reveal(completion: (() -> ())? = nil) {
         
-        guard !revealed else { return }
+        guard !revealed else {
+            completion?()
+            return
+        }
         revealed = true
         
         let duration: Double = 0.5
