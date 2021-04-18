@@ -178,7 +178,7 @@ public struct Stack {
     }
 }
 
-/// Complete implementation that can be used for verification of input
+/// Complete implementation that can be used in DFS vs BFS as well as for validation
 public func dfs(to target: String, from node: Node) -> [Node] {
     node.visited = true
     if node.value == target {
@@ -189,6 +189,32 @@ public func dfs(to target: String, from node: Node) -> [Node] {
             let path = dfs(to: target, from: neighbor)
             if path.count > 0 {
                 return [node] + path
+            }
+        }
+    }
+    return []
+}
+
+/// Complete implementation that can be used in DFS vs BFS as well as for validation
+public func bfs(to target: String, from node: Node) -> [Node] {
+    var q = [node]
+    node.visited = true
+    while !q.isEmpty {
+        let v = q.removeFirst()
+        if v.value == target {
+            var path = [v]
+            var n: Node = v
+            while n.pred != nil {
+                n = n.pred!
+                path = [n] + path
+            }
+            return path
+        }
+        for next in v.neighbors {
+            if !next.visited {
+                q.append(next)
+                next.pred = v
+                next.visited = true
             }
         }
     }
@@ -385,7 +411,6 @@ class NodeSprite: SKNode {
                 },
                 .scale(to: 1.5, duration: 0.2),
                 .scale(to: 1, duration: 0.2),
-                // Gå tillbaka också?
                 .run {
                     let isLastNode = (i == path.count-1)
                     if isLastNode {
