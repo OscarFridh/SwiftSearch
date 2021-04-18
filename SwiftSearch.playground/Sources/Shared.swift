@@ -58,10 +58,10 @@ public enum SearchEvent {
     case visited(String, Bool)
 }
 
+public typealias SearchAlgorithm = (String, Node) -> [Node]
+
 /// Handles searching
 public struct Level {
-    
-    public typealias SearchAlgorithm = (String, Node) -> [Node]
     
     public let graph: Graph
     let start: String
@@ -146,9 +146,39 @@ public struct Level {
     }
 }
 
+public struct Stack {
+    private var items = [Node]()
+    
+    public init() {}
+    
+    public mutating func push(_ item: Node) {
+        items.append(item)
+    }
+    
+    public mutating func pop() -> Node {
+        return items.removeLast()
+    }
+    
+    public var isEmpty: Bool {
+        return items.isEmpty
+    }
+}
 
 
 // MARK: View
+
+public class View: SKView {
+    public static func create(graph: Graph, searchResult: SearchResult, speed: Double = 1) -> UIView {
+        let view = View(frame: CGRect(x: 0, y: 0, width: 640, height: 480))
+        view.showsFPS = true
+        view.showsNodeCount = true
+        let scene = Scene.create(graph: graph, searchResult: searchResult)
+        scene.speed = CGFloat(speed)
+        view.presentScene(scene)
+        return view
+    }
+    
+}
 
 public class Scene: SKScene {
     // Kanske skulle skapa endast med Graph, SearchResult? --> Oberoende från sök alg!

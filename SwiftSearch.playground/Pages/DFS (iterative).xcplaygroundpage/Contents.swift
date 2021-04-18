@@ -15,7 +15,8 @@ func findPath(to target: String, from node: Node) -> [Node] {
 
 
 // 🐒
-let view = View(target: "x", searchAlgorithm: findPath, speed: 1)
+
+let view = View.create(target: "x", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
