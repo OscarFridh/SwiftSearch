@@ -12,22 +12,8 @@ extension View {
         .init(id: "f", value: "F", neighbors: []),
     ])
     
-    static func correctPath(to target: String, from node: Node) -> [Node] {
-        if node.value == target {
-            return [node]
-        } else {
-            for neighbor in node.neighbors {
-                let path = correctPath(to: target, from: neighbor)
-                if path.count > 0 {
-                    return [node] + path
-                }
-            }
-        }
-        return []
-    }
-    
     public static func create(target: String, searchAlgorithm: SearchAlgorithm, speed: Double) -> UIView {
-        let level = Level(graph: graph, targetValue: target, correctSearch: correctPath)
+        let level = Level(graph: graph, targetValue: target)
         let searchResult = level.search(using: searchAlgorithm)
         return View.create(graph: level.graph, searchResult: searchResult, speed: speed)
     }

@@ -66,23 +66,21 @@ public struct Level {
     public let graph: Graph
     let start: String
     let targetValue: String
-    private var correctPath: [String]!
     
-    public init(graph: Graph, start: String = "a", targetValue: String, correctSearch: SearchAlgorithm) {
+    public init(graph: Graph, start: String = "a", targetValue: String) {
         self.graph = graph
         self.start = start
         self.targetValue = targetValue
-        let (_, correctPath) = search(using: correctSearch)
-        self.correctPath = correctPath
     }
     
     public func search(using searchAlgorithm: SearchAlgorithm) -> SearchResult {
         let (events, path) = search(using: searchAlgorithm)
-        let correct = validate(path: path)
+        let (_, correctPath) = search(using: dfs)
+        let correct = validate(path: path, correctPath: correctPath)
         return SearchResult(searchEvents: events, path: path, correct: correct)
     }
     
-    private func validate(path: [String]) -> Bool {
+    private func validate(path: [String], correctPath: [String]) -> Bool {
         
         if path == correctPath {
             return true
@@ -184,6 +182,23 @@ public struct Stack {
     }
 }
 
+/// Complete implementation that can be used for verification of input
+public func dfs(to target: String, from node: Node) -> [Node] {
+    node.visited = true
+    if node.value == target {
+        return [node]
+    }
+    for neighbor in node.neighbors {
+        if !neighbor.visited {
+            let path = dfs(to: target, from: neighbor)
+            if path.count > 0 {
+                return [node] + path
+            }
+        }
+    }
+    return []
+}
+
 
 // MARK: View
 
@@ -236,7 +251,7 @@ public class Scene: SKScene {
     }
     
     public override func didMove(to view: SKView) {
-        print(searchResult)
+        print(searchResult!)
         animateSearchEvents()
         // Efteråt vill jag gärna kunna animera vägen som valdes ut, eventuellt även noden!
     }
