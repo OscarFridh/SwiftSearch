@@ -63,9 +63,9 @@ struct Level1 {
     typealias SearchAlgorithm = (String, Node) -> Node?
     
     let graph = Graph(nodes: [
-        .init(id: "a", value: "a", neighbors: ["b"]),
-        .init(id: "b", value: "b", neighbors: ["c"]),
-        .init(id: "c", value: "c", neighbors: []),
+        .init(id: "a", value: "🙋🏻‍♂️", neighbors: ["b"]),
+        .init(id: "b", value: "🤖", neighbors: ["c"]),
+        .init(id: "c", value: "🐒", neighbors: []),
     ])
     
     let start: String
@@ -168,19 +168,16 @@ class Scene: SKScene {
     private var selectedNodeId: String?
     private var nodeSprites = [String: NodeSprite]()
     
+    // Quick fix until I figure out how to load custom subclasses in editor into Playgrounds.
     private func setupNodeSprite(circle: SKNode) {
-        // Quick fix until I figure out how to load custom subclasses in editor into Playgrounds.
+        let nodeId = circle.name!
         let position = circle.position
         let parent = circle.parent
-        circle.removeFromParent()
-        let container = SKNode()
-        container.position = position
-        container.xScale = circle.xScale
-        container.yScale = circle.yScale
-        parent?.addChild(container)
-        let sprite = NodeSprite(content: graph.nodes[circle.name!]!.value)
-        container.addChild(sprite)
-        nodeSprites[circle.name!] = sprite
+        let sprite = NodeSprite(content: graph.nodes[nodeId]!.value)
+        sprite.position = position
+        sprite.setup(circle: circle)
+        parent?.addChild(sprite)
+        nodeSprites[nodeId] = sprite
     }
     
     override func didMove(to view: SKView) {
@@ -216,8 +213,8 @@ class NodeSprite: SKNode {
     
     // Child nodes
     private let transform = SKTransformNode()
-    private let circle = SKSpriteNode(imageNamed: "circle")
-    private let label = SKLabelNode(text: "?")
+    private var circle: SKNode!
+    private var label: SKLabelNode!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -232,17 +229,16 @@ class NodeSprite: SKNode {
     
     private func setup() {
         addChild(transform)
-        
-        // Colors!
-        circle.colorBlendFactor = 1
-        circle.color = .gray
+    }
+    
+    // Quick fix until I figure out how to load custom subclasses in editor into Playgrounds.
+    func setup(circle: SKNode) {
+        self.circle = circle
+        circle.removeFromParent()
         transform.addChild(circle)
-        
-        label.fontColor = .white
-        label.fontName = "Helvetica Neue Bold"
-        label.horizontalAlignmentMode = .center
-        label.verticalAlignmentMode = .center
-        transform.addChild(label)
+        circle.position = .zero
+        label = (circle.childNode(withName: "label")! as! SKLabelNode)
+        label.text = "?"
     }
     
     func select(completion: (() -> ())? = nil) {
