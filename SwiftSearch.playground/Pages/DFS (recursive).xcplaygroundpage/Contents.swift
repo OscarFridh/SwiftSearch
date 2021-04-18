@@ -30,10 +30,6 @@ func findPath(to target: String, from node: Node) -> [Node] {
 let view = View.create(target: "E", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
-/*:
- - Experiment: Make sure that your code also works when searching for something that can be found
- */
-
 
 //: [Next](@next)
 
@@ -69,4 +65,12 @@ func exampleFindPath(to target: String, from node: Node) -> [Node] {
 }
 
 
+/*:
+ - Experiment: Make sure that your code also works when searching for something that can be found
+ */
 
+
+/*:
+ - callout(Challenge):
+ The DFS algorithm can also be implemented iteratively using a stack...
+ */
