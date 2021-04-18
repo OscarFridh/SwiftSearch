@@ -7,5 +7,6 @@
         <page name='Cycles'/>
         <page name='DFS (recursive)'/>
         <page name='DFS (iterative)'/>
+        <page name='BFS'/>
     </pages>
 </playground>

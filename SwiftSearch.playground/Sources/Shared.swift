@@ -150,6 +150,8 @@ public class Node {
         }
     }
     
+    public var pred: Node?
+    
     public var neighbors = [Node]()
     var observer: ((SearchEvent) -> ())?
     
