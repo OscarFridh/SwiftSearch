@@ -3,13 +3,6 @@ import SpriteKit
 
 // MARK: Model
 
-// One uniform API for all pages
-public protocol Node: class {
-    var value: String { get }
-    var neighbors: [Node] { get }
-    var visited: Bool { get set }
-}
-
 /// Used to model a graph of nodes
 public struct Graph {
     
@@ -113,54 +106,55 @@ public struct Level {
     
     private func search(using searchAlgorithm: SearchAlgorithm) -> (searchEvents: [SearchEvent], path: [String]) {
         var searchEvents = [SearchEvent]()
-        let searchNodes = SearchNode.create(from: graph) { event in
+        let searchNodes = Node.create(from: graph) { event in
             searchEvents.append(event)
         }
-        let path = searchAlgorithm(targetValue, searchNodes[start]!).map { $0 as! SearchNode }.map { $0.id }
+        let path = searchAlgorithm(targetValue, searchNodes[start]!).map { $0.id }
         return (searchEvents, path)
     }
+}
+
+/// API exposed to user. Responsible for capturing search events triggered by the algorithm so that they can be used by the view and animated later.
+public class Node {
+    static func create(from graph: Graph, observer: ((SearchEvent) -> ())?) -> [String: Node] {
+        var searchNodes = [String: Node]()
+        for node in graph.nodes.values {
+            let searchNode = Node(node: node)
+            searchNodes[node.id] = searchNode
+            searchNode.observer = observer
+        }
+        for (source, destinations) in graph.edges {
+            searchNodes[source]!.neighbors = destinations.map { searchNodes[$0]! }
+        }
+        return searchNodes
+    }
     
-    private class SearchNode: Node {
-        static func create(from graph: Graph, observer: ((SearchEvent) -> ())?) -> [String: SearchNode] {
-            var searchNodes = [String: SearchNode]()
-            for node in graph.nodes.values {
-                let searchNode = SearchNode(node: node)
-                searchNodes[node.id] = searchNode
-                searchNode.observer = observer
-            }
-            for (source, destinations) in graph.edges {
-                searchNodes[source]!.neighbors = destinations.map { searchNodes[$0]! }
-            }
-            return searchNodes
+    let node: Graph.Node
+    
+    var id: String {
+        node.id
+    }
+    
+    public var value: String {
+        observer?(.check(id))
+        return node.value
+    }
+    
+    private var _visited: Bool = false
+    public var visited: Bool {
+        get {
+            return _visited
+        } set {
+            observer?(.visited(id, newValue))
+            _visited = newValue
         }
-        
-        let node: Graph.Node
-        
-        var id: String {
-            node.id
-        }
-        
-        var value: String {
-            observer?(.check(id))
-            return node.value
-        }
-        
-        private var _visited: Bool = false
-        var visited: Bool {
-            get {
-                return _visited
-            } set {
-                observer?(.visited(id, newValue))
-                _visited = newValue
-            }
-        }
-        
-        var neighbors = [Node]()
-        var observer: ((SearchEvent) -> ())?
-        
-        init(node: Graph.Node) {
-            self.node = node
-        }
+    }
+    
+    public var neighbors = [Node]()
+    var observer: ((SearchEvent) -> ())?
+    
+    init(node: Graph.Node) {
+        self.node = node
     }
 }
 
