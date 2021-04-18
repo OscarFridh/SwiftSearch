@@ -42,15 +42,20 @@ public struct Graph {
 
 /// The result after executing a search algorithm that is used as input to views
 public struct SearchResult {
-    public let searchEvents: [String]
+    public let searchEvents: [SearchEvent]
     public let nodeId: String?
     public let correct: Bool
     
-    public init(searchEvents: [String], nodeId: String?, correct: Bool) {
+    public init(searchEvents: [SearchEvent], nodeId: String?, correct: Bool) {
         self.searchEvents = searchEvents
         self.nodeId = nodeId
         self.correct = correct
     }
+}
+
+public enum SearchEvent {
+    case check(String)
+    case visited(String, Bool)
 }
 
 /// Handles searching
@@ -77,8 +82,8 @@ public struct Level {
         return SearchResult(searchEvents: events, nodeId: nodeId, correct: correct)
     }
     
-    private func search(using searchAlgorithm: SearchAlgorithm) -> (searchEvents: [String], nodeId: String?) {
-        var searchEvents = [String]()
+    private func search(using searchAlgorithm: SearchAlgorithm) -> (searchEvents: [SearchEvent], nodeId: String?) {
+        var searchEvents = [SearchEvent]()
         let searchNodes = SearchNode.create(from: graph) { event in
             searchEvents.append(event)
         }
@@ -87,7 +92,7 @@ public struct Level {
     }
     
     private class SearchNode: Node {
-        static func create(from graph: Graph, observer: ((String) -> ())?) -> [String: SearchNode] {
+        static func create(from graph: Graph, observer: ((SearchEvent) -> ())?) -> [String: SearchNode] {
             var searchNodes = [String: SearchNode]()
             for node in graph.nodes.values {
                 let searchNode = SearchNode(node: node)
@@ -107,7 +112,7 @@ public struct Level {
         }
         
         var value: String {
-            observer?(id)
+            observer?(.check(id))
             return node.value
         }
         
@@ -116,13 +121,13 @@ public struct Level {
             get {
                 return _visited
             } set {
-                // TODO: Notify observer!
+                observer?(.visited(id, newValue))
                 _visited = newValue
             }
         }
         
         var neighbors = [Node]()
-        var observer: ((String) -> ())?
+        var observer: ((SearchEvent) -> ())?
         
         init(node: Graph.Node) {
             self.node = node
@@ -153,7 +158,7 @@ public class Scene: SKScene {
             searchEventsQueue = searchResult.searchEvents
         }
     }
-    private var searchEventsQueue = [String]()
+    private var searchEventsQueue = [SearchEvent]()
     private var selectedNodeId: String?
     private var nodeSprites = [String: NodeSprite]()
     
@@ -182,7 +187,12 @@ public class Scene: SKScene {
             self.animateSearchEvents()
         }
         let searchEvent = searchEventsQueue.removeFirst()
-        nodeSprites[searchEvent]!.check(completion: completion)
+        switch searchEvent {
+        case .check(let nodeId):
+            nodeSprites[nodeId]!.check(completion: completion)
+        case .visited(let nodeId, let visited):
+            nodeSprites[nodeId]!.markAsVisited(visited, completion: completion)
+        }
     }
     
 }
@@ -267,5 +277,10 @@ class NodeSprite: SKNode {
         run(action) {
             completion?()
         }
+    }
+    
+    func markAsVisited(_ visited: Bool, completion: (() -> ())? = nil) {
+        circle.color = visited ? .systemRed : .systemBlue
+        completion?()
     }
 }
