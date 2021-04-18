@@ -12,6 +12,11 @@ func search(for target: String, in node: Node) -> Node? {
         return node
     } else {
         // Please fix this part!
+        for neighbor in node.neighbors {
+            if let node = exampleSearch(for: target, in: neighbor) {
+                return node
+            }
+        }
         return nil
     }
 }

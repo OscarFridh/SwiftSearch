@@ -4,5 +4,6 @@
         <page name='Intro'/>
         <page name='LinkedList'/>
         <page name='DAG'/>
+        <page name='Cycles'/>
     </pages>
 </playground>

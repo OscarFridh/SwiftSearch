@@ -7,6 +7,7 @@ import SpriteKit
 public protocol Node: class {
     var value: String { get }
     var neighbors: [Node] { get }
+    var visited: Bool { get set }
 }
 
 /// Used to model a graph of nodes
@@ -109,6 +110,17 @@ public struct Level {
             observer?(id)
             return node.value
         }
+        
+        private var _visited: Bool = false
+        var visited: Bool {
+            get {
+                return _visited
+            } set {
+                // TODO: Notify observer!
+                _visited = newValue
+            }
+        }
+        
         var neighbors = [Node]()
         var observer: ((String) -> ())?
         
