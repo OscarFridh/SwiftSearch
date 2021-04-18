@@ -11,7 +11,13 @@ import PlaygroundSupport
 
 
 func search(for target: String, in node: Node) -> Node? {
-    return nil
+    if node.value == target {
+        return node
+    } else if let neighbor = node.neighbor {
+        return search(for: target, in: neighbor)
+    } else {
+        return nil
+    }
 }
 
 let view = View(target: "🐒", searchAlgorithm: search, speed: 1)

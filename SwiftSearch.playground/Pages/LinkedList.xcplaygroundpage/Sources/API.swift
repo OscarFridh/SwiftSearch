@@ -151,16 +151,139 @@ class Scene: SKScene {
         let level = Level1(targetValue: target)
         scene.searchResult = level.search(using: searchAlgorithm)
         scene.graph = level.graph
+        scene.childNode(withName: "graph")?.children.forEach { node in
+            scene.setupNodeSprite(circle: node)
+        }
+        scene.backgroundColor = .white
         return scene
     }
     
-    var graph: Graph!
-    var searchResult: Level1.SearchResult!
+    private var graph: Graph!
+    private var searchResult: Level1.SearchResult! {
+        didSet {
+            searchEventsQueue = searchResult.searchEvents
+        }
+    }
+    private var searchEventsQueue = [String]()
+    private var selectedNodeId: String?
+    private var nodeSprites = [String: NodeSprite]()
     
-    override func didMove(to view: SKView) {
-        print(searchResult!)
-        // TODO: Animate search result!
+    private func setupNodeSprite(circle: SKNode) {
+        // Quick fix until I figure out how to load custom subclasses in editor into Playgrounds.
+        let position = circle.position
+        let parent = circle.parent
+        circle.removeFromParent()
+        let container = SKNode()
+        container.position = position
+        container.xScale = circle.xScale
+        container.yScale = circle.yScale
+        parent?.addChild(container)
+        let sprite = NodeSprite(content: graph.nodes[circle.name!]!.value)
+        container.addChild(sprite)
+        nodeSprites[circle.name!] = sprite
     }
     
+    override func didMove(to view: SKView) {
+        animateSearchEvents()
+    }
+    
+    private func animateSearchEvents() {
+        guard searchEventsQueue.count > 0 else {
+            return
+        }
+        let completion = {
+            self.animateSearchEvents()
+        }
+        let searchEvent = searchEventsQueue.removeFirst()
+        let selectAnimation = {
+            self.nodeSprites[searchEvent]!.select(completion: completion)
+        }
+        if let oldSelection = selectedNodeId {
+            self.nodeSprites[oldSelection]!.deselect(completion: selectAnimation)
+        } else {
+            selectAnimation()
+        }
+        selectedNodeId = searchEvent
+    }
+    
+}
+
+class NodeSprite: SKNode {
+    
+    // State
+    private var revealed = false
+    private var content: String = ""
+    
+    // Child nodes
+    private let transform = SKTransformNode()
+    private let circle = SKSpriteNode(imageNamed: "circle")
+    private let label = SKLabelNode(text: "?")
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    init(content: String) {
+        super.init()
+        self.content = content
+        setup()
+    }
+    
+    private func setup() {
+        addChild(transform)
+        
+        // Colors!
+        circle.colorBlendFactor = 1
+        circle.color = .gray
+        transform.addChild(circle)
+        
+        label.fontColor = .white
+        label.fontName = "Helvetica Neue Bold"
+        label.horizontalAlignmentMode = .center
+        label.verticalAlignmentMode = .center
+        transform.addChild(label)
+    }
+    
+    func select(completion: (() -> ())? = nil) {
+        circle.run(.colorize(with: .blue, colorBlendFactor: 1, duration: 0.3))
+        run(.sequence([
+            .scale(to: 1.5, duration: 0.3),
+            .wait(forDuration: 0.5),
+            .run {
+                self.reveal(completion: completion)
+            }
+        ]))
+    }
+    
+    func deselect(completion: (() -> ())? = nil) {
+        circle.run(.colorize(with: .gray, colorBlendFactor: 1, duration: 0.3))
+        run(.sequence([
+            .scale(to: 1, duration: 0.3),
+        ])) {
+            completion?()
+        }
+    }
+    
+    private func reveal(completion: (() -> ())? = nil) {
+        
+        guard !revealed else { return }
+        revealed = true
+        
+        let duration: Double = 0.5
+        
+        let action = SKAction.customAction(withDuration: duration) { (_, time) in
+            let progress = (time / CGFloat(duration))
+            if progress >= 0.5 {
+                self.label.text = self.content
+                self.label.yScale = -1
+            }
+            self.transform.xRotation = progress * .pi
+        }
+        
+        run(.sequence([action, .wait(forDuration: 0.3)])) {
+            completion?()
+        }
+    }
 }
 
