@@ -52,6 +52,73 @@ public struct SearchResult {
     }
 }
 
+/// Handles searching
+public struct Level {
+    
+    public typealias SearchAlgorithm = (String, Node) -> Node?
+    
+    public let graph: Graph
+    let start: String
+    let targetValue: String
+    private var correctNodeId: String?
+    
+    public init(graph: Graph, start: String = "a", targetValue: String, correctSearch: SearchAlgorithm) {
+        self.graph = graph
+        self.start = start
+        self.targetValue = targetValue
+        let (_, nodeId) = search(using: correctSearch)
+        self.correctNodeId = nodeId
+    }
+    
+    public func search(using searchAlgorithm: SearchAlgorithm) -> SearchResult {
+        let (events, nodeId) = search(using: searchAlgorithm)
+        let correct = (nodeId == correctNodeId)
+        return SearchResult(searchEvents: events, nodeId: nodeId, correct: correct)
+    }
+    
+    private func search(using searchAlgorithm: SearchAlgorithm) -> (searchEvents: [String], nodeId: String?) {
+        var searchEvents = [String]()
+        let searchNodes = SearchNode.create(from: graph) { event in
+            searchEvents.append(event)
+        }
+        let node = searchAlgorithm(targetValue, searchNodes[start]!) as? SearchNode
+        return (searchEvents, node?.id)
+    }
+    
+    private class SearchNode: Node {
+        static func create(from graph: Graph, observer: ((String) -> ())?) -> [String: SearchNode] {
+            var searchNodes = [String: SearchNode]()
+            for node in graph.nodes.values {
+                let searchNode = SearchNode(node: node)
+                searchNodes[node.id] = searchNode
+                searchNode.observer = observer
+            }
+            for (source, destinations) in graph.edges {
+                searchNodes[source]!.neighbors = destinations.map { searchNodes[$0]! }
+            }
+            return searchNodes
+        }
+        
+        let node: Graph.Node
+        
+        var id: String {
+            node.id
+        }
+        
+        var value: String {
+            observer?(id)
+            return node.value
+        }
+        var neighbors = [Node]()
+        var observer: ((String) -> ())?
+        
+        init(node: Graph.Node) {
+            self.node = node
+        }
+    }
+}
+
+
 
 // MARK: View
 
