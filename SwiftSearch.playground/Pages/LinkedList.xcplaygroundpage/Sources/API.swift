@@ -22,9 +22,17 @@ public class View: SKView {
     }
 }
 
+// One uniform API for all pages
 public protocol Node: class {
     var value: String { get }
-    var neighbor: Node? { get }
+    var neighbors: [Node] { get }
+}
+
+// Convenience for level 1 & 3
+public extension Node {
+    var neighbor: Node? {
+        neighbors.first
+    }
 }
 
 
@@ -89,7 +97,7 @@ struct Level1 {
     private func correctSearch(for target: String, in node: Node) -> Node? {
         if node.value == target {
             return node
-        } else if let neighbor = node.neighbor {
+        } else if let neighbor = node.neighbors.first {
             return correctSearch(for: target, in: neighbor)
         } else {
             return nil
@@ -120,7 +128,7 @@ struct Level1 {
                 searchNode.observer = observer
             }
             for (source, destinations) in graph.edges {
-                searchNodes[source]!.neighbor = destinations.map { searchNodes[$0]! }.first
+                searchNodes[source]!.neighbors = destinations.map { searchNodes[$0]! }
             }
             return searchNodes
         }
@@ -135,7 +143,7 @@ struct Level1 {
             observer?(id)
             return node.value
         }
-        var neighbor: Node?
+        var neighbors = [Node]()
         var observer: ((String) -> ())?
         
         init(node: Graph.Node) {
@@ -182,6 +190,7 @@ class Scene: SKScene {
     }
     
     override func didMove(to view: SKView) {
+        print(searchResult)
         animateSearchEvents()
     }
     
