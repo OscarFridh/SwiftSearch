@@ -7,21 +7,21 @@
 import PlaygroundSupport
 
 
-func search(for target: String, in node: Node) -> Node? {
+func findPath(to target: String, from node: Node) -> [Node] {
     if node.value == target {
-        return node
+        return [node]
     } else {
-        // Please fix this part!
-        for neighbor in node.neighbors {
-            if let node = exampleSearch(for: target, in: neighbor) {
-                return node
+        for neighbor in node.neighbors.reversed() {
+            let path = findPath(to: target, from: neighbor)
+            if path.count > 0 {
+                return [node] + path
             }
         }
-        return nil
     }
+    return []
 }
 
-let view = View(target: "F", searchAlgorithm: search, speed: 1)
+let view = View(target: "F", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
@@ -57,17 +57,18 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
 
-func exampleSearch(for target: String, in node: Node) -> Node? {
+func exampleFindPath(to target: String, from node: Node) -> [Node] {
     if node.value == target {
-        return node
+        return [node]
     } else {
         for neighbor in node.neighbors {
-            if let node = exampleSearch(for: target, in: neighbor) {
-                return node
+            let path = exampleFindPath(to: target, from: neighbor)
+            if path.count > 0 {
+                return [node] + path
             }
         }
-        return nil
     }
+    return []
 }
 
 

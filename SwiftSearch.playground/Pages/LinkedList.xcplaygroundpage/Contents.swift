@@ -1,7 +1,7 @@
 /*:
  [Previous](@previous)
  # Linked List
- You are given a list of nodes. Each node hides an emoji and your job is to find out which node that is hiding a certain emoji 🐒.
+ You are given a list of nodes. Each node hides an emoji and your job is to find the path to the node that is hiding a certain emoji 🐒.
  Every node except the last node in the list points to the following node as its neighbor.
  
  Please implement the following function and run your code to see how it works.
@@ -10,17 +10,19 @@
 import PlaygroundSupport
 
 
-func search(for target: String, in node: Node) -> Node? {
+func findPath(to target: String, from node: Node) -> [Node] {
     if node.value == target {
-        return node
+        return [node]
     } else if let neighbor = node.neighbor {
-        return search(for: target, in: neighbor)
-    } else {
-        return nil
+        let path = findPath(to: target, from: neighbor)
+        if path.count > 0 {
+            return [node] + path
+        }
     }
+    return []
 }
 
-let view = View(target: "🐒", searchAlgorithm: search, speed: 1)
+let view = View(target: "🐒", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
@@ -64,14 +66,16 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
  */
 
 
-func exampleSearch(for target: String, in node: Node) -> Node? {
+func exampleFindPath(to target: String, from node: Node) -> [Node] {
     if node.value == target {
-        return node
+        return [node]
     } else if let neighbor = node.neighbor {
-        return exampleSearch(for: target, in: neighbor)
-    } else {
-        return nil
+        let path = exampleFindPath(to: target, from: neighbor)
+        if path.count > 0 {
+            return [node] + path
+        }
     }
+    return []
 }
 
 

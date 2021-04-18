@@ -43,12 +43,12 @@ public struct Graph {
 /// The result after executing a search algorithm that is used as input to views
 public struct SearchResult {
     public let searchEvents: [SearchEvent]
-    public let nodeId: String?
+    public let path: [String]
     public let correct: Bool
     
-    public init(searchEvents: [SearchEvent], nodeId: String?, correct: Bool) {
+    public init(searchEvents: [SearchEvent], path: [String], correct: Bool) {
         self.searchEvents = searchEvents
-        self.nodeId = nodeId
+        self.path = path
         self.correct = correct
     }
 }
@@ -61,34 +61,45 @@ public enum SearchEvent {
 /// Handles searching
 public struct Level {
     
-    public typealias SearchAlgorithm = (String, Node) -> Node?
+    public typealias SearchAlgorithm = (String, Node) -> [Node]
     
     public let graph: Graph
     let start: String
     let targetValue: String
-    private var correctNodeId: String?
+    private var correctPath: [String]!
     
     public init(graph: Graph, start: String = "a", targetValue: String, correctSearch: SearchAlgorithm) {
         self.graph = graph
         self.start = start
         self.targetValue = targetValue
-        let (_, nodeId) = search(using: correctSearch)
-        self.correctNodeId = nodeId
+        let (_, correctPath) = search(using: correctSearch)
+        self.correctPath = correctPath
     }
     
     public func search(using searchAlgorithm: SearchAlgorithm) -> SearchResult {
-        let (events, nodeId) = search(using: searchAlgorithm)
-        let correct = (nodeId == correctNodeId)
-        return SearchResult(searchEvents: events, nodeId: nodeId, correct: correct)
+        let (events, path) = search(using: searchAlgorithm)
+        let correct = validate(path: path)
+        return SearchResult(searchEvents: events, path: path, correct: correct)
     }
     
-    private func search(using searchAlgorithm: SearchAlgorithm) -> (searchEvents: [SearchEvent], nodeId: String?) {
+    private func validate(path: [String]) -> Bool {
+        guard path.first == start else { return false }
+        guard path.last == correctPath.last else { return false }
+        for i in 0..<path.count-1 {
+            let from = path[i]
+            let to = path[i+1]
+            guard graph.edges[from]?.contains(to) == true else { return false}
+        }
+        return true
+    }
+    
+    private func search(using searchAlgorithm: SearchAlgorithm) -> (searchEvents: [SearchEvent], path: [String]) {
         var searchEvents = [SearchEvent]()
         let searchNodes = SearchNode.create(from: graph) { event in
             searchEvents.append(event)
         }
-        let node = searchAlgorithm(targetValue, searchNodes[start]!) as? SearchNode
-        return (searchEvents, node?.id)
+        let path = searchAlgorithm(targetValue, searchNodes[start]!).map { $0 as! SearchNode }.map { $0.id }
+        return (searchEvents, path)
     }
     
     private class SearchNode: Node {
@@ -177,6 +188,7 @@ public class Scene: SKScene {
     public override func didMove(to view: SKView) {
         print(searchResult)
         animateSearchEvents()
+        // Efteråt vill jag gärna kunna animera vägen som valdes ut, eventuellt även noden!
     }
     
     private func animateSearchEvents() {

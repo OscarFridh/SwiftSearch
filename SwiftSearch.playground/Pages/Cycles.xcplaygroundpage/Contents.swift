@@ -8,20 +8,22 @@
 import PlaygroundSupport
 
 
-func search(for target: String, in node: Node) -> Node? {
+func findPath(to target: String, from node: Node) -> [Node] {
     node.visited = true
     if node.value == target {
-        return node
+        return [node]
     } else if node.neighbor?.visited == false {
-        return search(for: target, in: node.neighbor!)
-    } else {
-        return nil
+        let path = findPath(to: target, from: node.neighbor!)
+        if path.count > 0 {
+            return [node] + path
+        }
     }
+    return []
 }
 
 
 // 🐒
-let view = View(target: "d", searchAlgorithm: search, speed: 1)
+let view = View(target: "d", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
@@ -57,15 +59,17 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
 
-func exampleSearch(for target: String, in node: Node) -> Node? {
+func exampleFindPath(to target: String, from node: Node) -> [Node] {
     node.visited = true
     if node.value == target {
-        return node
+        return [node]
     } else if node.neighbor?.visited == false {
-        return exampleSearch(for: target, in: node.neighbor!)
-    } else {
-        return nil
+        let path = exampleFindPath(to: target, from: node.neighbor!)
+        if path.count > 0 {
+            return [node] + path
+        }
     }
+    return []
 }
 
 

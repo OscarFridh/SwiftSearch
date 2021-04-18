@@ -12,6 +12,8 @@
  6. DFS vs BFS
  7. Wrap up
  
+ I know that you only have 3 minutes
+ 
  Let's get started!
  
  [Next](@next)

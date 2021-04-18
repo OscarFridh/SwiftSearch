@@ -9,27 +9,13 @@
 import PlaygroundSupport
 
 
-func search(for target: String, in node: Node) -> Node? {
-    var stack = Stack()
-    stack.push(node)
-    while !stack.isEmpty {
-        let v = stack.pop()
-        if v.value == target {
-            return v
-        }
-        if !v.visited {
-            v.visited = true
-            for neighbor in v.neighbors {
-                stack.push(neighbor)
-            }
-        }
-    }
-    return nil
+func findPath(to target: String, from node: Node) -> [Node] {
+    return []
 }
 
 
 // 🐒
-let view = View(target: "x", searchAlgorithm: search, speed: 1)
+let view = View(target: "x", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
@@ -53,29 +39,21 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 /*:
  - callout(Hint):
- If we finish the while loop, the target could not be found and we should return nil
+ In order to keep track of the previous nodes, we can make use of node.pred
+ */
+
+
+/*:
+ - callout(Hint):
+ If we finish the while loop, the target could not be found
  */
 
 
 
 
 
-func exampleSearch(for target: String, in node: Node) -> Node? {
-    var stack = Stack()
-    stack.push(node)
-    while !stack.isEmpty {
-        let v = stack.pop()
-        if v.value == target {
-            return v
-        }
-        if !v.visited {
-            v.visited = true
-            for neighbor in v.neighbors {
-                stack.push(neighbor)
-            }
-        }
-    }
-    return nil
+func exampleFindPath(to target: String, from node: Node) -> [Node] {
+    return []
 }
 
 

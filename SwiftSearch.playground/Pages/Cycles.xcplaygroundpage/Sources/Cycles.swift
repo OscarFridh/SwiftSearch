@@ -3,8 +3,8 @@ import SpriteKit
 
 public class View: SKView {
     let target: String
-    let searchAlgorithm: (String, Node) -> Node?
-    public init(target: String, searchAlgorithm: @escaping (String, Node) -> Node?, speed: Double = 1) {
+    let searchAlgorithm: Level.SearchAlgorithm
+    public init(target: String, searchAlgorithm: @escaping Level.SearchAlgorithm, speed: Double = 1) {
         self.target = target
         self.searchAlgorithm = searchAlgorithm
         super.init(frame: CGRect(x: 0, y: 0, width: 640, height: 480))
@@ -23,18 +23,20 @@ public class View: SKView {
             .init(id: "b", value: "🤖", neighbors: ["c"]),
             .init(id: "c", value: "🐒", neighbors: ["a"]), // a
         ])
-        return Level(graph: graph, start: "a", targetValue: target, correctSearch: correctSearch)
+        return Level(graph: graph, start: "a", targetValue: target, correctSearch: correctPath)
     }
     
-    func correctSearch(for target: String, in node: Node) -> Node? {
+    func correctPath(to target: String, from node: Node) -> [Node] {
         node.visited = true
         if node.value == target {
-            return node
+            return [node]
         } else if node.neighbor?.visited == false {
-            return correctSearch(for: target, in: node.neighbor!)
-        } else {
-            return nil
+            let path = correctPath(to: target, from: node.neighbor!)
+            if path.count > 0 {
+                return [node] + path
+            }
         }
+        return []
     }
     
     required init?(coder: NSCoder) {
