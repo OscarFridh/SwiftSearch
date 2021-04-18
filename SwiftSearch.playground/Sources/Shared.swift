@@ -247,17 +247,18 @@ public class Scene: SKScene {
     }
     
     public override func didMove(to view: SKView) {
-        print(searchResult!)
-        animateSearchEvents()
-        // Efteråt vill jag gärna kunna animera vägen som valdes ut, eventuellt även noden!
+        animateSearchEvents() {
+            self.highlightPath()
+        }
     }
     
-    private func animateSearchEvents() {
+    private func animateSearchEvents(completion completedFullAnimation: (() -> ())? = nil) {
         guard searchEventsQueue.count > 0 else {
+            completedFullAnimation?()
             return
         }
         let completion = {
-            self.animateSearchEvents()
+            self.animateSearchEvents(completion: completedFullAnimation)
         }
         let searchEvent = searchEventsQueue.removeFirst()
         switch searchEvent {
@@ -266,6 +267,20 @@ public class Scene: SKScene {
         case .visited(let nodeId, let visited):
             nodeSprites[nodeId]!.markAsVisited(visited, completion: completion)
         }
+    }
+    
+    private func highlightPath(completion: (() -> ())? = nil) {
+        let pathNodes: [NodeSprite] = searchResult.path.compactMap { self.nodeSprites[$0] }
+        let otherNodes = graph.nodes.values.filter { !searchResult.path.contains($0.id) }.compactMap { self.nodeSprites[$0.id] }
+        
+        // Fade out other nodes and arrows
+        for n in otherNodes {
+            n.run(.fadeOut(withDuration: 0.5))
+        }
+        childNode(withName: "edges")?.run(.fadeOut(withDuration: 0.5))
+        
+        // Animate the selected path
+        NodeSprite.highlight(pathNodes, correct: searchResult.correct, completion: completion)
     }
     
 }
@@ -302,7 +317,7 @@ class NodeSprite: SKNode {
         circle.removeFromParent()
         transform.addChild(circle)
         circle.position = .zero
-        circle.color = .systemBlue
+        circle.color = .initialCircle
         label = (circle.childNode(withName: "label")! as! SKLabelNode)
         label.text = "?"
     }
@@ -353,7 +368,38 @@ class NodeSprite: SKNode {
     }
     
     func markAsVisited(_ visited: Bool, completion: (() -> ())? = nil) {
-        circle.color = visited ? .systemRed : .systemBlue
+        circle.color = visited ? .discoveredCircle : .initialCircle
         completion?()
     }
+    
+    static func highlight(_ path: [NodeSprite], correct: Bool, completion: (() -> ())? = nil) {
+        guard path.count > 0 else {
+            completion?()
+            return
+        }
+        for (i, node) in path.enumerated() {
+            node.run(.sequence([
+                .wait(forDuration: Double(i)/5),
+                .run {
+                    node.circle.color = correct ? .correctCircle : .incorrectCircle
+                },
+                .scale(to: 1.5, duration: 0.2),
+                .scale(to: 1, duration: 0.2),
+                // Gå tillbaka också?
+                .run {
+                    let isLastNode = (i == path.count-1)
+                    if isLastNode {
+                        completion?()
+                    }
+                }
+            ]))
+        }
+    }
+}
+
+extension UIColor {
+    static let initialCircle = UIColor.systemBlue
+    static let discoveredCircle = UIColor.systemPurple
+    static let correctCircle = UIColor.systemGreen
+    static let incorrectCircle = UIColor.systemRed
 }

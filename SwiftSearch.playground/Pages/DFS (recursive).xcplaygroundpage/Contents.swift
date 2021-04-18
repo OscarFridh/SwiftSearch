@@ -18,7 +18,7 @@ func findPath(to target: String, from node: Node) -> [Node] {
         if !neighbor.visited {
             let path = findPath(to: target, from: neighbor)
             if path.count > 0 {
-                return [node] + path
+                return path + [node] + path
             }
         }
     }
