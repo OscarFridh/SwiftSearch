@@ -3,11 +3,12 @@
  # Linked List
  
  We are given a list of nodes where each node hides an emoji.
- Our job is to find a path from a starting node to the emoji 🐒
+ Our job is to find a path from a starting node to a certain emoji 🐒
  
  Please finish implementing the function below to do that recursively.
+ 
+ Scroll down to see an example solution ↓
  */
-
 import PlaygroundSupport
 
 func findPath(to emoji: String, from node: Node) -> [Node] {
@@ -25,14 +26,9 @@ func findPath(to emoji: String, from node: Node) -> [Node] {
     return []
 }
 
-
 let searchResult = Level.search(for: "🐒", using: findPath)
 let view = View.create(searchResult: searchResult, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
-
-//: Scroll down to see an example solution ↓
-
-
 
 
 
