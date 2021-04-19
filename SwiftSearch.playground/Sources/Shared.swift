@@ -75,13 +75,6 @@ public struct Level {
     
     private func validate(path: [String], correctPath: [String]) -> Bool {
         
-        if path == correctPath {
-            return true
-        } else if path == [] || correctPath == [] {
-            // Avoid fatal errors from first, last below!
-            return false
-        }
-        
         guard path.first == correctPath.first else {
             print("Start of path is \(path.first ?? "nil") but should be \(start)")
             return false
@@ -92,12 +85,14 @@ public struct Level {
             
         }
         
-        for i in 0..<path.count-1 {
-            let from = path[i]
-            let to = path[i+1]
-            guard graph.edges[from]?.contains(to) == true else {
-                print("There is no edge from \(from) to \(to)")
-                return false
+        if correctPath.count > 0 {
+            for i in 0..<path.count-1 {
+                let from = path[i]
+                let to = path[i+1]
+                guard graph.edges[from]?.contains(to) == true else {
+                    print("There is no edge from \(from) to \(to)")
+                    return false
+                }
             }
         }
         
