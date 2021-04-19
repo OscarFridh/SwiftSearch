@@ -43,10 +43,6 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
  Implement the DFS algorithm  iteratively using a stack
  */
 
-/*:
- The DFS algorithm was unable to find the shortest path to the emoji. We will fix this with the next algorithm.
- */
-
 
 //: [Next](@next)
 

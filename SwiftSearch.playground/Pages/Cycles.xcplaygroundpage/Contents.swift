@@ -1,11 +1,11 @@
 /*:
  [Previous](@previous)
  # Cycles
- When searching a graph with cycles it is important to avoid getting stuck in an infinate loop.
+ When searching a graph with cycles it is important to avoid getting stuck in an infinite loop.
  In order to do this we mark nodes as discovered as we visit them.
- If a neighbor has already been discovered we can avoid visiting it again and thereby escape the cycle.
+ If a neighbor has already been discovered we can avoid visiting it again and thereby escaping the cycle.
  
- Discovered nodes will be shown in purple.
+ Discovered nodes are shown in purple.
  */
 
 import PlaygroundSupport
@@ -28,5 +28,8 @@ func findPath(to emoji: String, from node: Node) -> [Node] {
 let view = View.create(target: "🏆", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
+/*:
+ If you try to find the path to an emoji that is not present, the algorithm ends up searching the entire graph before it returns. In that case there is no path to the target (represented by an empty array) and no path to show in green (or red) at the end.
+ */
 
 //: [Next](@next)
