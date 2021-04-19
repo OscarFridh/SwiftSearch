@@ -3,11 +3,9 @@
  # Linked List
  
  We are given a list of nodes where each node hides an emoji.
- Our task is to find the path leading from the start of the list to a certain emoji.
- We do this by recursively going down the list until we find the right emoji.
- Then the path can be retreived as we go back.
+ Our job is to find a path from a starting node to the emoji 🐒
  
- A node's neighbor points to the next node in the list. We know that we have reached the end of the list when we come to a node that does not have a neighbor.
+ Please finish implementing the function below to do that recursively.
  */
 
 import PlaygroundSupport
@@ -15,30 +13,54 @@ import PlaygroundSupport
 func findPath(to emoji: String, from node: Node) -> [Node] {
     if node.emoji == emoji {
         return [node]
-    } else if let neighbor = node.neighbor {
-        let path = findPath(to: emoji, from: neighbor)
-        if path.count > 0 {
-            return [node] + path
-        }
     }
+    
+    /** TODO:
+     If the node has a neighbor:
+        Return a path starting with this node, followed by the remaining path returned from the neighbor.
+     otherwise:
+        We have reached the end of the list without finding the emoji, return []
+     */
+    
     return []
 }
 
-let view = View.create(target: "🐒", searchAlgorithm: findPath, speed: 1)
+
+let searchResult = Level.search(for: "🐒", using: findPath)
+let view = View.create(searchResult: searchResult, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
-/*:
- - Experiment: Search for another emoji
- 
- The following ones can be found: 🐒🙋🏻‍♂️🤖
- */
+//: Scroll down to see an example solution ↓
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*:
- The path returned by the search algorithm is shown at the end of the animation. If the path is valid and leads to the right destination it is shown in green, otherwise it is shown in red.
+ Copy and paste to quickly see a solution.
+ Replace the function above with the following:
  */
 
-
-
+/*:
+     func findPath(to emoji: String, from node: Node) -> [Node] {
+         if node.emoji == emoji {
+             return [node]
+         }
+         if let nextNode = node.neighbor {
+              return [node] + findPath(to: emoji, from: nextNode)
+         }
+         return []
+     }
+ */
 
 //: [Next](@next)
