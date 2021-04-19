@@ -16,7 +16,8 @@
  3. [Cycles](Cycles)
  4. [Depth First Search](DFS)
  5. [Breadth First Search](BFS)
- 6. [DFS vs BFS](DFSvsBFS)
+ 6. [DFS vs BFS](Comparing)
+ 6. [On a larger graph](LargeGraph)
  7. [Thank you](ThankYou)
  
  Let's get started! 🕵️
