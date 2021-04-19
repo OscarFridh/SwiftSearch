@@ -5,9 +5,11 @@
  In this Playground we will explore and illustrate a couple of search algorithms step by step in a playful and educational way.
  
  ## UX
- - Input: Your Swift code
- - Output: Animations illustrating how your algorithm works
-
+ - Input: Swift code
+ - Output: Animations illustrating the algorithm
+ 
+ The animations are linked to your code, meaning that any modifications are reflected visually!
+ 
  ## Table of content
  1. [Linked List](LinkedList)
  2. [Directed Asyclic Graph](DAG)
