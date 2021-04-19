@@ -135,7 +135,7 @@ public class Node {
         node.id
     }
     
-    public var value: String {
+    public var emoji: String {
         observer?(.check(id))
         return node.value
     }
@@ -181,7 +181,7 @@ public struct Stack {
 /// Complete implementation that can be used in DFS vs BFS as well as for validation
 public func dfs(to target: String, from node: Node) -> [Node] {
     node.discovered = true
-    if node.value == target {
+    if node.emoji == target {
         return [node]
     }
     for neighbor in node.neighbors {
@@ -201,7 +201,7 @@ public func bfs(to target: String, from node: Node) -> [Node] {
     node.discovered = true
     while !q.isEmpty {
         let v = q.removeFirst()
-        if v.value == target {
+        if v.emoji == target {
             var path = [v]
             var n: Node = v
             while n.pred != nil {

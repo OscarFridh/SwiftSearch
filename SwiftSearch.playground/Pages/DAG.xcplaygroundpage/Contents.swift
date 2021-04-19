@@ -10,12 +10,12 @@
 import PlaygroundSupport
 
 
-func findPath(to target: String, from node: Node) -> [Node] {
-    if node.value == target {
+func findPath(to emoji: String, from node: Node) -> [Node] {
+    if node.emoji == emoji {
         return [node]
     } else {
         for neighbor in node.neighbors {
-            let path = findPath(to: target, from: neighbor)
+            let path = findPath(to: emoji, from: neighbor)
             if path.count > 0 {
                 return [node] + path
             }
@@ -25,7 +25,7 @@ func findPath(to target: String, from node: Node) -> [Node] {
 }
 
 /*:
- - Experiment: Try exploring branches in reverse order by reversing the list of neighbors in the for loop.
+ - Experiment: Explore branches in reverse order by reversing the list of neighbors in the for loop.
  */
 
 

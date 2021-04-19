@@ -12,14 +12,14 @@
 import PlaygroundSupport
 
 
-func findPath(to target: String, from node: Node) -> [Node] {
+func findPath(to emoji: String, from node: Node) -> [Node] {
     node.discovered = true
-    if node.value == target {
+    if node.emoji == emoji {
         return [node]
     }
     for neighbor in node.neighbors {
         if !neighbor.discovered {
-            let path = findPath(to: target, from: neighbor)
+            let path = findPath(to: emoji, from: neighbor)
             if path.count > 0 {
                 return [node] + path
             }
@@ -29,7 +29,7 @@ func findPath(to target: String, from node: Node) -> [Node] {
 }
 
 /*:
- - Experiment: Try returning the wrong path on the way back from the recursion
+ - Experiment: Intentionally return the wrong path
  
  For example: return [node] + path + [node]
  */

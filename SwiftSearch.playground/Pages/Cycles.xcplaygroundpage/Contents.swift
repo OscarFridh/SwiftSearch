@@ -10,12 +10,12 @@
 
 import PlaygroundSupport
 
-func findPath(to target: String, from node: Node) -> [Node] {
+func findPath(to emoji: String, from node: Node) -> [Node] {
     node.discovered = true
-    if node.value == target {
+    if node.emoji == emoji {
         return [node]
     } else if node.neighbor?.discovered == false {
-        let path = findPath(to: target, from: node.neighbor!)
+        let path = findPath(to: emoji, from: node.neighbor!)
         if path.count > 0 {
             return [node] + path
         }

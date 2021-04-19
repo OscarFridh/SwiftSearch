@@ -12,11 +12,11 @@
 
 import PlaygroundSupport
 
-func findPath(to target: String, from node: Node) -> [Node] {
-    if node.value == target {
+func findPath(to emoji: String, from node: Node) -> [Node] {
+    if node.emoji == emoji {
         return [node]
     } else if let neighbor = node.neighbor {
-        let path = findPath(to: target, from: neighbor)
+        let path = findPath(to: emoji, from: neighbor)
         if path.count > 0 {
             return [node] + path
         }
@@ -28,9 +28,9 @@ let view = View.create(target: "🐒", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 /*:
- - Experiment: Try searching for another emoji as target
+ - Experiment: Search for another emoji
  
- The following emojis can be found: 🐒🙋🏻‍♂️🤖
+ The following ones can be found: 🐒🙋🏻‍♂️🤖
  */
 
 
