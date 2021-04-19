@@ -13,12 +13,12 @@ import PlaygroundSupport
 
 
 func findPath(to target: String, from node: Node) -> [Node] {
-    node.visited = true
+    node.discovered = true
     if node.value == target {
         return [node]
     }
     for neighbor in node.neighbors {
-        if !neighbor.visited {
+        if !neighbor.discovered {
             let path = findPath(to: target, from: neighbor)
             if path.count > 0 {
                 return [node] + path

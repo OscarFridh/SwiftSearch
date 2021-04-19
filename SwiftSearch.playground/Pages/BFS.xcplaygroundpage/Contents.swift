@@ -12,7 +12,7 @@ import PlaygroundSupport
 
 func findPath(to target: String, from node: Node) -> [Node] {
     var q = [node]
-    node.visited = true
+    node.discovered = true
     while !q.isEmpty {
         let v = q.removeFirst()
         if v.value == target {
@@ -25,10 +25,10 @@ func findPath(to target: String, from node: Node) -> [Node] {
             return path
         }
         for next in v.neighbors {
-            if !next.visited {
+            if !next.discovered {
                 q.append(next)
                 next.pred = v
-                next.visited = true
+                next.discovered = true
             }
         }
     }
