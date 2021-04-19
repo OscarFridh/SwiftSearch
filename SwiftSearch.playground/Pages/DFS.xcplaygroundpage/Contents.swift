@@ -28,21 +28,25 @@ func findPath(to emoji: String, from node: Node) -> [Node] {
     return []
 }
 
-/*:
- - Experiment: Intentionally return the wrong path
- 
- For example: return [node] + path + [node]
- */
-
 // The following emojis can be found: 🕵️🤖😍🏆🐒🙋🏻‍♂️
 let view = View.create(target: "😍", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 /*:
- - callout(Challenge):
- Implement the DFS algorithm  iteratively using a stack
+ ## Scenario explained
+ We start searching from 🤖
+ 
+ We continue to 🙋🏻‍♂️ followed by 🕵️ and 🐒
+ 
+ We do not continue from 🐒 to 🙋🏻‍♂️ since 🙋🏻‍♂️ has already been discovered.
+ 
+ 🐒 does not have any other neighbors so we return [] and back up from the recursion to 🕵️ followed by 🙋🏻‍♂️ and 🤖
+ 
+ We continue from 🤖 to its next neighbor 😍
+ 
+ 😍 is the target so we return the path [😍] back to 🤖 and retreive [🤖, 😍] as our path
+ 
  */
-
 
 //: [Next](@next)
 
