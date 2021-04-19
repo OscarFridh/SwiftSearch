@@ -1,16 +1,16 @@
-//: [Previous](@previous)
 
-import Foundation
+/*:
+ [Previous](@previous)
+ # Thank you!
+ I really appreaciate that you took the time to look at my Playground. I hope you have enjoyed it!
+ */
 
-var str = "Hello, playground"
+/*:
+Bye for now. Hope to see you at **#WWDC21** 🙌
 
-// Inspireras av min förra Playground!?
+Enjoy reviewing the other participants and have a nice day!
+*/
 
-//: [Next](@next)
-
-
-// TODO: Förklara hur det går till
-// Kortfattat: Vad är poängen? Vad ska/kan man göra och hur?
-// Inspirera till att modifiera koden snarare än att skriva den helt från början
-// Förklara algoritmerna och vad som händer på samma sätt som när jag visar för någon annan - så att de säkert förstår poängen!
-// Förklara att animationerna byggs upp dynamiskt utifrån koden - det som är hela poängen med min Playground!
+/*:
+- callout(Extra): If you're interested you can find this Playground on [GitHub](https://github.com/OscarFridh/SwiftSearch)
+*/
