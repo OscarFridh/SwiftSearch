@@ -34,8 +34,8 @@ func findPath(to emoji: String, from node: Node) -> [Node] {
  For example: return [node] + path + [node]
  */
 
-// TODO: The following emojis can be found: ...
-let view = View.create(target: "E", searchAlgorithm: findPath, speed: 1)
+// The following emojis can be found: 🕵️🤖😍🏆🐒🙋🏻‍♂️
+let view = View.create(target: "😍", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 /*:

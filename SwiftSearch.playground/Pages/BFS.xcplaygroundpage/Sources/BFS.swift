@@ -4,12 +4,12 @@ import SpriteKit
 extension View {
     
     static let graph = Graph(nodes: [
-        .init(id: "a", value: "A", neighbors: ["b", "d"]),
-        .init(id: "b", value: "B", neighbors: ["c"]),
-        .init(id: "c", value: "C", neighbors: []),
-        .init(id: "d", value: "D", neighbors: ["e", "f"]),
-        .init(id: "e", value: "E", neighbors: []),
-        .init(id: "f", value: "F", neighbors: ["a"]),
+        .init(id: "a", value: "🤖", neighbors: ["b", "d"]),
+        .init(id: "b", value: "🙋🏻‍♂️", neighbors: ["c"]),
+        .init(id: "c", value: "🕵️", neighbors: []),
+        .init(id: "d", value: "🐒", neighbors: ["e", "f"]),
+        .init(id: "e", value: "😍", neighbors: []),
+        .init(id: "f", value: "🏆", neighbors: ["a"]),
     ])
     
     public static func create(target: String, searchAlgorithm: SearchAlgorithm, speed: Double) -> UIView {

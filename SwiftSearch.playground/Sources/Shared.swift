@@ -300,10 +300,10 @@ public class Scene: SKScene {
         let otherNodes = graph.nodes.values.filter { !searchResult.path.contains($0.id) }.compactMap { self.nodeSprites[$0.id] }
         
         // Fade out other nodes and arrows
-        for n in otherNodes {
-            n.run(.fadeOut(withDuration: 0.5))
-        }
-        childNode(withName: "edges")?.run(.fadeOut(withDuration: 0.5))
+//        for n in otherNodes {
+//            n.run(.fadeOut(withDuration: 0.5))
+//        }
+//        childNode(withName: "edges")?.run(.fadeOut(withDuration: 0.5))
         
         // Animate the selected path
         NodeSprite.highlight(pathNodes, correct: searchResult.correct, completion: completion)

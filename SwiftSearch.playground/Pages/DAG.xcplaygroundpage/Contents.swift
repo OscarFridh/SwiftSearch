@@ -29,8 +29,8 @@ func findPath(to emoji: String, from node: Node) -> [Node] {
  */
 
 
-// The following emojis can be found: 🐒🙋🏻‍♂️🤖
-let view = View.create(target: "F", searchAlgorithm: findPath, speed: 1)
+// The following emojis can be found: 🕵️🤖😍🏆🐒🙋🏻‍♂️
+let view = View.create(target: "🏆", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 

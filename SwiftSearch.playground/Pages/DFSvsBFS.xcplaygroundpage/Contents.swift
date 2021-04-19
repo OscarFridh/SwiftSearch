@@ -17,7 +17,9 @@ let searchAlgorithms = [dfs, bfs]
 
 
 // TODO: Enum overloading snyggare!
-let view = View.create(target: "J", searchAlgorithm: searchAlgorithms[1], speed: 1)
+
+// The following emojis can be found: 🕵️🤖😍🏆🐒🙋🏻‍♂️🎉🍀🌎🍕🏸🏄‍♂️👨🏻‍💻🎸🎹🏊‍♂️
+let view = View.create(target: "🍀", searchAlgorithm: searchAlgorithms[1], speed: 2)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
