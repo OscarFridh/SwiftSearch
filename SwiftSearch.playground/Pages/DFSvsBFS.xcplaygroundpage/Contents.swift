@@ -9,8 +9,15 @@ import PlaygroundSupport
 
 let searchAlgorithms = [dfs, bfs]
 
+// Det är bra att demonstrera var för sig (svårt att följa 2 st samtidigt --> Bespara mig själv lite jobb)
+// Däremot kan det var a bra att byta ut A,B,C till emojis eftersom vi inte kopplar de till någon naturlig ordning
+
+
+// BFS hittar den kortaste vägen! Därmed är det inte sagt att själva sökningen går snabbare.
+
+
+// TODO: Enum overloading snyggare!
 let view = View.create(target: "J", searchAlgorithm: searchAlgorithms[1], speed: 1)
-// TODO: Stack or change SKScene on completion with a custom delegate!
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 

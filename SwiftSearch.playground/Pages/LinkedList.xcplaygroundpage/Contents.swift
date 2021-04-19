@@ -1,14 +1,16 @@
 /*:
  [Previous](@previous)
  # Linked List
- You are given a list of nodes. Each node hides an emoji and your job is to find the path to the node that is hiding a certain emoji 🐒.
- Every node except the last node in the list points to the following node as its neighbor.
  
- Please implement the following function and run your code to see how it works.
+ We are given a list of nodes where each node hides an emoji.
+ Our task is to find the path leading from the start of the list to a certain emoji.
+ We do this by recursively going down the list until we find the right emoji.
+ Then the path can be retreived as we go back.
+ 
+ A node's neighbor points to the next node in the list. We know that we have reached the end of the list when we come to a node that does not have a neighbor.
  */
 
 import PlaygroundSupport
-
 
 func findPath(to target: String, from node: Node) -> [Node] {
     if node.value == target {
@@ -25,58 +27,18 @@ func findPath(to target: String, from node: Node) -> [Node] {
 let view = View.create(target: "🐒", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
+/*:
+ - Experiment: Try searching for another emoji as target
+ 
+ The following emojis can be found: 🐒🙋🏻‍♂️🤖
+ */
+
+
+/*:
+ The path returned by the search algorithm is shown at the end of the animation. If the path is valid and leads to the right destination it is shown in green, otherwise it is shown in red.
+ */
+
+
+
 
 //: [Next](@next)
-
-
-//: ## Hints and solutions below ↓
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*:
- - callout(Hint):
- I have provided example solutions at the end of each page. Feel free to scroll down and have a look.
- */
-
-
-/*:
- - Experiment: Try searching for other emojis in the list and make sure that your code works even for emojis that are not present in the list.
- */
-
-
-func exampleFindPath(to target: String, from node: Node) -> [Node] {
-    if node.value == target {
-        return [node]
-    } else if let neighbor = node.neighbor {
-        let path = exampleFindPath(to: target, from: neighbor)
-        if path.count > 0 {
-            return [node] + path
-        }
-    }
-    return []
-}
-
-
-

@@ -1,8 +1,13 @@
 
 /*:
  # Swift Search
- In this playground we will explore and code a few search algorithms together step by step in Swift. You will implement the search function and see how it operates as you run your code. The UX is very much inspired by Bytes in the Swift playground app and I think it is a great way of learning. I hope you will enjoy it!
+
+ In this Playground we will explore and illustrate a couple of search algorithms step by step in a playful and educational way.
  
+ ## UX
+ - Input: Your Swift code
+ - Output: Animations illustrating how your algorithm works
+
  ## Table of content
  1. [Linked List](LinkedList)
  2. [Directed Asyclic Graph](DAG)
@@ -12,8 +17,9 @@
  6. [DFS vs BFS](DFSvsBFS)
  7. [Thank you](ThankYou)
  
- Let's get started!
+ Let's get started! 🕵️
  
  [Next](@next)
  
  */
+

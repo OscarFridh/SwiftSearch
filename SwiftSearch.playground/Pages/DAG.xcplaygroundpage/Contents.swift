@@ -1,7 +1,10 @@
 /*:
  [Previous](@previous)
  # Directed Asyclic Graph (DAG)
- Now we will allow each node to have 0, 1 or multiple neighbors. Please fix the code below so that it works for this new requirement. Do not worry about cycles yet.
+ 
+ Now we will allow each node to have 0, 1 or multiple neighbors.
+ We do however not tolerate any neighbors that would cause cycles.
+ Our search algorithm will go all the way down a branch, then back up just enough to continue all the way down another branch, and so on...
  */
 
 import PlaygroundSupport
@@ -11,7 +14,7 @@ func findPath(to target: String, from node: Node) -> [Node] {
     if node.value == target {
         return [node]
     } else {
-        for neighbor in node.neighbors.reversed() {
+        for neighbor in node.neighbors {
             let path = findPath(to: target, from: neighbor)
             if path.count > 0 {
                 return [node] + path
@@ -21,55 +24,16 @@ func findPath(to target: String, from node: Node) -> [Node] {
     return []
 }
 
+/*:
+ - Experiment: Try exploring branches in reverse order by reversing the list of neighbors in the for loop.
+ */
+
+
+// The following emojis can be found: 🐒🙋🏻‍♂️🤖
 let view = View.create(target: "F", searchAlgorithm: findPath, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 
 //: [Next](@next)
-
-
-//: ## Hints and solutions below ↓
-
-
-
-
-
-
-
-
-/*:
- - callout(Hint):
- We need to continue the search for all neighbors to a node.
- */
-
-
-/*:
- - Experiment: Try searching in the opposite order by reversing the list of neighbors.
- */
-
-
-
-
-
-
-
-
-
-
-
-func exampleFindPath(to target: String, from node: Node) -> [Node] {
-    if node.value == target {
-        return [node]
-    } else {
-        for neighbor in node.neighbors {
-            let path = exampleFindPath(to: target, from: neighbor)
-            if path.count > 0 {
-                return [node] + path
-            }
-        }
-    }
-    return []
-}
-
 
 
