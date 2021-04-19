@@ -6,9 +6,6 @@
 
 import PlaygroundSupport
 
-
-let searchAlgorithms = [dfs, bfs]
-
 // Det är bra att demonstrera var för sig (svårt att följa 2 st samtidigt --> Bespara mig själv lite jobb)
 // Däremot kan det var a bra att byta ut A,B,C till emojis eftersom vi inte kopplar de till någon naturlig ordning
 
@@ -16,10 +13,8 @@ let searchAlgorithms = [dfs, bfs]
 // BFS hittar den kortaste vägen! Därmed är det inte sagt att själva sökningen går snabbare.
 
 
-// TODO: Enum overloading snyggare!
-
 // The following emojis can be found: 🕵️🤖😍🏆🐒🙋🏻‍♂️🎉🍀🌎🍕🏸🏄‍♂️👨🏻‍💻🎸🎹🏊‍♂️
-let view = View.create(target: "🍀", searchAlgorithm: searchAlgorithms[1], speed: 2)
+let view = View.create(target: "🍀", searchAlgorithm: .bfs, speed: 2)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 

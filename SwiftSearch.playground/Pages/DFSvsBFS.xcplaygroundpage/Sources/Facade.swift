@@ -25,7 +25,20 @@ extension View {
     public static func create(target: String, searchAlgorithm: SearchAlgorithm, speed: Double) -> UIView {
         let level = Level(graph: graph, targetValue: target)
         let searchResult = level.search(using: searchAlgorithm)
-        print(searchResult.path)
         return View.create(graph: level.graph, searchResult: searchResult, speed: speed)
     }
+    
+    public static func create(target: String, searchAlgorithm: Algorithm, speed: Double) -> UIView {
+        let map: [Algorithm: SearchAlgorithm] = [
+            .dfs: dfs,
+            .bfs: bfs
+        ]
+        return create(target: target, searchAlgorithm: map[searchAlgorithm]!, speed: speed)
+    }
+    
+}
+
+public enum Algorithm {
+    case dfs
+    case bfs
 }
