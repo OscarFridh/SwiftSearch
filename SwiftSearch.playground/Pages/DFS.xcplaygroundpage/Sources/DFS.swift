@@ -4,11 +4,11 @@ import SpriteKit
 extension View {
     
     static let graph = Graph(nodes: [
-        .init(id: "a", value: "🤖", neighbors: ["b", "d"]),
+        .init(id: "a", value: "🤖", neighbors: ["b", "e"]),
         .init(id: "b", value: "🙋🏻‍♂️", neighbors: ["c"]),
-        .init(id: "c", value: "🕵️", neighbors: []),
-        .init(id: "d", value: "🐒", neighbors: ["e", "f"]),
-        .init(id: "e", value: "😍", neighbors: []),
+        .init(id: "c", value: "🕵️", neighbors: ["d"]),
+        .init(id: "d", value: "🐒", neighbors: ["b"]),
+        .init(id: "e", value: "😍", neighbors: ["f"]),
         .init(id: "f", value: "🏆", neighbors: ["a"]),
     ])
     
