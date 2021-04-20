@@ -1,18 +1,19 @@
 /*:
  [Previous](@previous)
  
- # On a larger gaph
- Finally, let's compare and see how the two algorithms perform on a larger graph!
+ # A larger gaph
+ Let's see DFS and BFS one more time in a larger graph.
  
- 
- Run this page twice, change the search algorithm to be used in between.
- 
+ Run this page once for both algorithms.
  */
 
 import PlaygroundSupport
 
+// Change this to see bfs in action
+let searchAlgorithm = Algorithm.dfs
+
 let emoji = "🍀"
-let searchResult = Level.search(for: emoji, using: .dfs)
+let searchResult = Level.search(for: emoji, using: searchAlgorithm)
 let view = View.create(searchResult: searchResult, speed: 2)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
@@ -24,13 +25,8 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 /*:
  ## Conclusion
- If we need to find the shortest path between two nodes in this type of graph, use BFS.
- BFS is able to always find the shortest path due to the nature of how it searches.
- If we do not need to find the shortest path, DFS works just as well.
-*/
-
-/*:
- >A shorter path does not mean that we find the emoji faster.
+ * If we need to find the shortest path between two nodes in a graph we should use BFS instead of DFS.
+ * If we do not need to find the shortest path, DFS works just as well.
 */
 
 

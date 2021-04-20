@@ -6,8 +6,8 @@
         <page name='DAG'/>
         <page name='Cycles'/>
         <page name='DFS'/>
-        <page name='BFS'/>
         <page name='Comparing'/>
+        <page name='BFS'/>
         <page name='LargeGraph'/>
         <page name='ThankYou'/>
     </pages>
