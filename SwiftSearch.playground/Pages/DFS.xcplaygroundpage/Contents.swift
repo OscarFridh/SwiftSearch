@@ -19,7 +19,7 @@ func findPath(from node: Node, to emoji: String) throws -> [Node] {
     if try node.checkEmoji() == emoji {
         return [node]
     }
-    for nextNode in node.neighbors {
+    if let nextNode = node.neighbors.first {
         if nextNode.discovered == false {
             let remainingPath = try findPath(from: nextNode, to: emoji)
             if remainingPath.count > 0 {
@@ -29,6 +29,7 @@ func findPath(from node: Node, to emoji: String) throws -> [Node] {
     }
     return []
 }
+
 
 /*:
  - callout(Hint): Replace the second if statement with a for loop
