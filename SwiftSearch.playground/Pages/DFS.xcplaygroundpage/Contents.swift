@@ -2,8 +2,8 @@
  [Previous](@previous)
  # Depth first search (DFS)
  
- Let's combine our knowledge about DAG and Cycles to implement the DFS algorithm.
- Each node is allowed to have 0, 1 or multiple neighbors and there may be cycles in the graph.
+ Now let's allow each node to have multiple neighbors.
+ We will end up implementing the DFS algorithm.
  
  ![Pseudo code](dfs.png)
  (Pseudo code from [Wikipedia](https://en.wikipedia.org/wiki/Depth-first_search))
@@ -15,9 +15,25 @@ import PlaygroundSupport
 
 
 func findPath(from node: Node, to emoji: String) throws -> [Node] {
-    // Please feel free to copy & paste the solution if you are short on time!
+    node.discovered = true
+    if try node.checkEmoji() == emoji {
+        return [node]
+    }
+    for nextNode in node.neighbors {
+        if nextNode.discovered == false {
+            let remainingPath = try findPath(from: nextNode, to: emoji)
+            if remainingPath.count > 0 {
+                return [node] + remainingPath
+            }
+        }
+    }
     return []
 }
+
+/*:
+ - callout(Hint): Replace the second if statement with a for loop
+ */
+
 
 
 // The following emojis can be found: 🕵️🤖😍🏆🐒🙋🏻‍♂️
@@ -56,11 +72,11 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
          if try node.checkEmoji() == emoji {
              return [node]
          }
-         for neighbor in node.neighbors {
-             if !neighbor.discovered {
-                 let path = try findPath(from: neighbor, to: emoji)
-                 if path.count > 0 {
-                     return [node] + path
+         for nextNode in node.neighbors {
+             if nextNode.discovered == false {
+                 let remainingPath = try findPath(from: nextNode, to: emoji)
+                 if remainingPath.count > 0 {
+                     return [node] + remainingPath
                  }
              }
          }

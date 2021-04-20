@@ -4,12 +4,12 @@
  # A larger gaph
  Let's see DFS and BFS one more time in a larger graph.
  
- Run this page once for both algorithms.
+ Run this page once for each algorithm.
  */
 
 import PlaygroundSupport
 
-// Change this to see bfs in action
+// Change this to see BFS in action
 let searchAlgorithm = Algorithm.dfs
 
 let emoji = "🍀"

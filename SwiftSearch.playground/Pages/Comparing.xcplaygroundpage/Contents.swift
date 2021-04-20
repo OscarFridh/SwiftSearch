@@ -2,14 +2,14 @@
  [Previous](@previous)
  
  # DFS vs BFS
- Let's see DFS in action again and compare it to another algorithm called BFS.
+ Let's see DFS again and compare it to another algorithm called BFS.
  
- Run this page once for both algorithms.
+ Run this page once for each algorithm.
  */
 
 import PlaygroundSupport
 
-// Change this to see bfs in action
+// Change this to see BFS in action
 let searchAlgorithm = Algorithm.dfs
 
 
@@ -26,6 +26,10 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
 /*:
  >A shorter path does not mean that we find the emoji faster.
 */
+
+/*:
+ > DFS explores all the way down a branch before it backs up just enough to continue all the way down the next branch.
+ */
 
 
 //: [Next](@next)
