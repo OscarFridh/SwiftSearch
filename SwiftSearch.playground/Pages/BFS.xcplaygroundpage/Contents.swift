@@ -2,7 +2,7 @@
  [Previous](@previous)
  # Breadth first search (BFS)
  
- BFS explores nodes in a different order than DFS. First, every node one step away from the starting point is visited. Then every node two steps away from the starting point is visited, and so on... This enables the algorithm to always return the shortest possible path to the emoji. Let's see it in action!
+ Here's an implementation of the BFS algorithm.
  
  ![Pseudo code](bfs.png)
  (Pseudo code from [Wikipedia](https://en.wikipedia.org/wiki/Breadth-first_search))
