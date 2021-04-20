@@ -233,8 +233,6 @@ public func bfs(from node: Node, to emoji: String) throws -> [Node] {
 public class View: SKView {
     public static func create(graph: Graph, searchResult: SearchResult, speed: Double = 1) -> UIView {
         let view = View(frame: CGRect(x: 0, y: 0, width: 640, height: 480))
-        view.showsFPS = true
-        view.showsNodeCount = true
         let scene = Scene.create(graph: graph, searchResult: searchResult)
         scene.speed = CGFloat(speed)
         view.presentScene(scene)

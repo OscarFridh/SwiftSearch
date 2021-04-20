@@ -4,7 +4,7 @@
  # DFS vs BFS
  Let's see DFS again and compare it to another algorithm called BFS.
  
- Run this page once for each algorithm.
+ Run this page once for each algorithm (using Algorithm.bfs or Algorithm.dfs).
  */
 
 import PlaygroundSupport

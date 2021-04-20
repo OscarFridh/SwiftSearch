@@ -3,7 +3,10 @@
  # Depth first search (DFS)
  
  Now let's allow each node to have multiple neighbors.
- We will end up implementing the DFS algorithm.
+ Currently our algorithm only explores one neighbor and might not find the emoji.
+ 
+ Please fix this.
+ You will end up implementing the DFS algorithm.
  
  ![Pseudo code](dfs.png)
  (Pseudo code from [Wikipedia](https://en.wikipedia.org/wiki/Depth-first_search))
@@ -29,6 +32,8 @@ func findPath(from node: Node, to emoji: String) throws -> [Node] {
     }
     return []
 }
+
+
 
 
 /*:

@@ -4,7 +4,7 @@
  # A larger gaph
  Let's see DFS and BFS one more time in a larger graph.
  
- Run this page once for each algorithm.
+ Run this page once for each algorithm (using Algorithm.bfs or Algorithm.dfs).
  */
 
 import PlaygroundSupport
