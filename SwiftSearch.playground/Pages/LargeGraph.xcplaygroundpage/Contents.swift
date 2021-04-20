@@ -11,7 +11,9 @@
 
 import PlaygroundSupport
 
-let view = View.create(target: "🍀", searchAlgorithm: .dfs, speed: 2)
+let emoji = "🍀"
+let searchResult = Level.search(for: emoji, using: .dfs)
+let view = View.create(searchResult: searchResult, speed: 2)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
 /*:

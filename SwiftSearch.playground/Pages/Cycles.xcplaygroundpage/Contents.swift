@@ -14,8 +14,9 @@ func findPath(from node: Node, to emoji: String) -> [Node] {
     node.discovered = true
     if node.emoji == emoji {
         return [node]
-    } else if node.neighbor?.discovered == false {
-        let path = findPath(to: emoji, from: node.neighbor!)
+    }
+    if node.neighbor?.discovered == false {
+        let path = findPath(from: node.neighbor!, to: emoji)
         if path.count > 0 {
             return [node] + path
         }
@@ -25,9 +26,11 @@ func findPath(from node: Node, to emoji: String) -> [Node] {
 
 
 // The following emojis can be found: 🐒🙋🏻‍♂️🤖
-let view = View.create(target: "🏆", searchAlgorithm: findPath, speed: 1)
+let emoji = "🏆"
+let searchResult = Level.search(for: emoji, using: findPath)
+let view = View.create(searchResult: searchResult, speed: 1)
+// TODO: view.colors.discoveredCircle = #colorliteral ...
 PlaygroundSupport.PlaygroundPage.current.liveView = view
-
 /*:
  If you try to find the path to an emoji that is not present, the algorithm ends up searching the entire graph before it returns. In that case there is no path to the target (represented by an empty array) and no path to show in green (or red) at the end.
  */

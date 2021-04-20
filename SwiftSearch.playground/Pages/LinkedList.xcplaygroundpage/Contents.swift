@@ -26,7 +26,8 @@ func findPath(from node: Node, to emoji: String) -> [Node] {
     return []
 }
 
-let searchResult = Level.search(for: "🐒", using: findPath)
+let emoji = "🐒"
+let searchResult = Level.search(for: emoji, using: findPath)
 let view = View.create(searchResult: searchResult, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
 
