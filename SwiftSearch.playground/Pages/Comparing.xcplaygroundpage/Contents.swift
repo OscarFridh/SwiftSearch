@@ -9,7 +9,7 @@
 
 import PlaygroundSupport
 
-// Change this to see BFS in action
+// Change this to see BFS
 let searchAlgorithm = Algorithm.dfs
 
 
