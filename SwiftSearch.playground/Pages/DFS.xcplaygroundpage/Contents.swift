@@ -7,32 +7,26 @@
  
  ![Pseudo code](dfs.png)
  (Pseudo code from [Wikipedia](https://en.wikipedia.org/wiki/Depth-first_search))
+ 
+ Scroll down to see an example solution ↓
  */
 
 import PlaygroundSupport
 
 
 func findPath(from node: Node, to emoji: String) -> [Node] {
-    node.discovered = true
-    if node.emoji == emoji {
-        return [node]
-    }
-    for neighbor in node.neighbors {
-        if !neighbor.discovered {
-            let path = findPath(from: neighbor, to: emoji)
-            if path.count > 0 {
-                return [node] + path
-            }
-        }
-    }
+    // Please feel free to copy & paste the solution if you are short on time!
     return []
 }
+
 
 // The following emojis can be found: 🕵️🤖😍🏆🐒🙋🏻‍♂️
 let emoji = "😍"
 let searchResult = Level.search(for: emoji, using: findPath)
 let view = View.create(searchResult: searchResult, speed: 1)
 PlaygroundSupport.PlaygroundPage.current.liveView = view
+
+
 /*:
  ## Scenario explained
  We start searching from 🤖
@@ -49,6 +43,30 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
  
  */
 
+
+
+/*:
+ Copy and paste to quickly see a solution.
+ Replace the function above with the following:
+ */
+
+/*:
+     func findPath(from node: Node, to emoji: String) -> [Node] {
+         node.discovered = true
+         if node.emoji == emoji {
+             return [node]
+         }
+         for neighbor in node.neighbors {
+             if !neighbor.discovered {
+                 let path = findPath(from: neighbor, to: emoji)
+                 if path.count > 0 {
+                     return [node] + path
+                 }
+             }
+         }
+         return []
+     }
+ */
+
+
 //: [Next](@next)
-
-
