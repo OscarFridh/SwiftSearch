@@ -51,7 +51,7 @@ public enum SearchEvent {
     case discovered(String, Bool)
 }
 
-public typealias SearchAlgorithm = (String, Node) -> [Node]
+public typealias SearchAlgorithm = (Node, String) -> [Node]
 
 /// Handles searching
 public struct Level {
@@ -104,7 +104,7 @@ public struct Level {
         let searchNodes = Node.create(from: graph) { event in
             searchEvents.append(event)
         }
-        let path = searchAlgorithm(targetValue, searchNodes[start]!).map { $0.id }
+        let path = searchAlgorithm(searchNodes[start]!, targetValue).map { $0.id }
         return (searchEvents, path)
     }
 }
@@ -174,14 +174,14 @@ public struct Stack {
 }
 
 /// Complete implementation that can be used in DFS vs BFS as well as for validation
-public func dfs(to target: String, from node: Node) -> [Node] {
+public func dfs(from node: Node, to target: String) -> [Node] {
     node.discovered = true
     if node.emoji == target {
         return [node]
     }
     for neighbor in node.neighbors {
         if !neighbor.discovered {
-            let path = dfs(to: target, from: neighbor)
+            let path = dfs(from: neighbor, to: target)
             if path.count > 0 {
                 return [node] + path
             }
@@ -191,7 +191,7 @@ public func dfs(to target: String, from node: Node) -> [Node] {
 }
 
 /// Complete implementation that can be used in DFS vs BFS as well as for validation
-public func bfs(to target: String, from node: Node) -> [Node] {
+public func bfs(from node: Node, to target: String) -> [Node] {
     var q = [node]
     node.discovered = true
     while !q.isEmpty {

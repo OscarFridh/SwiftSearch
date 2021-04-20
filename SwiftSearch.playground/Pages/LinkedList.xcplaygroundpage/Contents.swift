@@ -11,7 +11,7 @@
  */
 import PlaygroundSupport
 
-func findPath(to emoji: String, from node: Node) -> [Node] {
+func findPath(from node: Node, to emoji: String) -> [Node] {
     if node.emoji == emoji {
         return [node]
     }
@@ -48,7 +48,7 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
  */
 
 /*:
-     func findPath(to emoji: String, from node: Node) -> [Node] {
+     func findPath(from node: Node, to emoji: String) -> [Node] {
          if node.emoji == emoji {
              return [node]
          }
