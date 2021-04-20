@@ -12,7 +12,7 @@ import PlaygroundSupport
 
 func findPath(from node: Node, to emoji: String) -> [Node] {
     node.discovered = true
-    if node.emoji == emoji {
+    if node.checkEmoji() == emoji {
         return [node]
     }
     if node.neighbor?.discovered == false {

@@ -53,7 +53,7 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
 /*:
      func findPath(from node: Node, to emoji: String) -> [Node] {
          node.discovered = true
-         if node.emoji == emoji {
+         if node.checkEmoji() == emoji {
              return [node]
          }
          for neighbor in node.neighbors {

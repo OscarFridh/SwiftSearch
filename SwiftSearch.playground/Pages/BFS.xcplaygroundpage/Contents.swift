@@ -15,7 +15,7 @@ func findPath(from node: Node, to emoji: String) -> [Node] {
     node.discovered = true
     while !q.isEmpty {
         let v = q.removeFirst()
-        if v.emoji == emoji {
+        if v.checkEmoji() == emoji {
             var path = [v]
             var n: Node = v
             while n.pred != nil {

@@ -130,7 +130,7 @@ public class Node {
         node.id
     }
     
-    public var emoji: String {
+    public func checkEmoji() -> String {
         observer?(.check(id))
         return node.value
     }
@@ -174,14 +174,14 @@ public struct Stack {
 }
 
 /// Complete implementation that can be used in DFS vs BFS as well as for validation
-public func dfs(from node: Node, to target: String) -> [Node] {
+public func dfs(from node: Node, to emoji: String) -> [Node] {
     node.discovered = true
-    if node.emoji == target {
+    if node.checkEmoji() == emoji {
         return [node]
     }
     for neighbor in node.neighbors {
         if !neighbor.discovered {
-            let path = dfs(from: neighbor, to: target)
+            let path = dfs(from: neighbor, to: emoji)
             if path.count > 0 {
                 return [node] + path
             }
@@ -191,12 +191,12 @@ public func dfs(from node: Node, to target: String) -> [Node] {
 }
 
 /// Complete implementation that can be used in DFS vs BFS as well as for validation
-public func bfs(from node: Node, to target: String) -> [Node] {
+public func bfs(from node: Node, to emoji: String) -> [Node] {
     var q = [node]
     node.discovered = true
     while !q.isEmpty {
         let v = q.removeFirst()
-        if v.emoji == target {
+        if v.checkEmoji() == emoji {
             var path = [v]
             var n: Node = v
             while n.pred != nil {
