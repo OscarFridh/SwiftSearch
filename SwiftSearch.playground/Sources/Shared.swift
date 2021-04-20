@@ -51,7 +51,7 @@ public enum SearchEvent {
     case discovered(String, Bool)
 }
 
-public typealias SearchAlgorithm = (Node, String) -> [Node]
+public typealias SearchAlgorithm = (Node, String) throws -> [Node]
 
 /// Handles searching
 public struct Level {
@@ -104,8 +104,8 @@ public struct Level {
         let searchNodes = Node.create(from: graph) { event in
             searchEvents.append(event)
         }
-        let path = searchAlgorithm(searchNodes[start]!, targetValue).map { $0.id }
-        return (searchEvents, path)
+        let path = try? searchAlgorithm(searchNodes[start]!, targetValue).map { $0.id }
+        return (searchEvents, path ?? [])
     }
 }
 
@@ -130,7 +130,14 @@ public class Node {
         node.id
     }
     
-    public func checkEmoji() -> String {
+    /// Used to escape infinite loops
+    private static var checksLeft = 1000
+    
+    public func checkEmoji() throws -> String {
+        Node.checksLeft -= 1
+        if Node.checksLeft < 0 {
+            throw SearchError.infiniteLoop
+        }
         observer?(.check(id))
         return node.value
     }
@@ -155,6 +162,10 @@ public class Node {
     }
 }
 
+enum SearchError: Error {
+    case infiniteLoop
+}
+
 public struct Stack {
     private var items = [Node]()
     
@@ -174,14 +185,14 @@ public struct Stack {
 }
 
 /// Complete implementation that can be used in DFS vs BFS as well as for validation
-public func dfs(from node: Node, to emoji: String) -> [Node] {
+public func dfs(from node: Node, to emoji: String) throws -> [Node] {
     node.discovered = true
-    if node.checkEmoji() == emoji {
+    if try node.checkEmoji() == emoji {
         return [node]
     }
     for neighbor in node.neighbors {
         if !neighbor.discovered {
-            let path = dfs(from: neighbor, to: emoji)
+            let path = try dfs(from: neighbor, to: emoji)
             if path.count > 0 {
                 return [node] + path
             }
@@ -191,12 +202,12 @@ public func dfs(from node: Node, to emoji: String) -> [Node] {
 }
 
 /// Complete implementation that can be used in DFS vs BFS as well as for validation
-public func bfs(from node: Node, to emoji: String) -> [Node] {
+public func bfs(from node: Node, to emoji: String) throws -> [Node] {
     var q = [node]
     node.discovered = true
     while !q.isEmpty {
         let v = q.removeFirst()
-        if v.checkEmoji() == emoji {
+        if try v.checkEmoji() == emoji {
             var path = [v]
             var n: Node = v
             while n.pred != nil {

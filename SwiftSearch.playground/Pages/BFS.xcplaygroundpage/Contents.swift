@@ -10,12 +10,12 @@
 
 import PlaygroundSupport
 
-func findPath(from node: Node, to emoji: String) -> [Node] {
+func findPath(from node: Node, to emoji: String) throws -> [Node] {
     var q = [node]
     node.discovered = true
     while !q.isEmpty {
         let v = q.removeFirst()
-        if v.checkEmoji() == emoji {
+        if try v.checkEmoji() == emoji {
             var path = [v]
             var n: Node = v
             while n.pred != nil {

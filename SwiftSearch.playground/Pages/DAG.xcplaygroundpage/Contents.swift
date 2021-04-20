@@ -12,12 +12,12 @@
  */
 import PlaygroundSupport
 
-func findPath(from node: Node, to emoji: String) -> [Node] {
-    if node.checkEmoji() == emoji {
+func findPath(from node: Node, to emoji: String) throws -> [Node] {
+    if try node.checkEmoji() == emoji {
         return [node]
     }
     if let nextNode = node.neighbors.first {
-        let path = findPath(from: nextNode, to: emoji)
+        let path = try findPath(from: nextNode, to: emoji)
         if path.count > 0 {
             return [node] + path
         }
@@ -55,12 +55,12 @@ PlaygroundSupport.PlaygroundPage.current.liveView = view
  */
 
 /*:
-     func findPath(from node: Node, to emoji: String) -> [Node] {
-         if node.checkEmoji() == emoji {
+     func findPath(from node: Node, to emoji: String) throws -> [Node] {
+         if try node.checkEmoji() == emoji {
              return [node]
          }
          for nextNode in node.neighbors {
-             let path = findPath(from: nextNode, to: emoji)
+             let path = try findPath(from: nextNode, to: emoji)
              if path.count > 0 {
                  return [node] + path
              }
